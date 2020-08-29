@@ -9,5 +9,15 @@
             "email": "devellisper@outlook.com"
         }
     ],
-    "require": {}
+    "require": {
+        "php": "^7.4",
+        "symfony/console": "^5.1",
+        "illuminate/support": "^7.26",
+        "illuminate/view": "^7.26"
+    },
+    "autoload": {
+        "psr-4": {
+            "EllGreen\\Pace\\": "src/"
+        }
+    }
 }
