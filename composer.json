@@ -1,0 +1,13 @@
+{
+    "name": "ellgreen/pace",
+    "description": "Simple static site generator using Laravel blade",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ellis Green",
+            "email": "devellisper@outlook.com"
+        }
+    ],
+    "require": {}
+}
