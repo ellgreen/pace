@@ -12,11 +12,11 @@ class ApplicationTest extends TestCase
     public function testRegisterCommands()
     {
         $application = $this->mock(Application::class)->makePartial();
-        $application->shouldReceive('add')->once();
+        $application->shouldReceive('add')->twice();
 
         $container = $this->mock(Container::class);
 
-        $container->shouldReceive('make')->once()->andReturn($this->mock(Command::class));
+        $container->shouldReceive('make')->twice()->andReturn($this->mock(Command::class));
 
         $application->registerCommands($container);
     }

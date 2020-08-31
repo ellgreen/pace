@@ -8,22 +8,44 @@ Using, [Laravel Blade](https://laravel.com/docs/7.x/blade),
 
 ## Installation
 
-Create a new Pace project
+### Create a new Pace project
 
 ```bash
 composer create-project ellgreen/pace-template
 ```
 
-Install the npm dependencies
+### Install the npm dependencies
 
 ```bash
 npm install
 ```
 
-Build the assets
+### Building the static site
 
-```
+#### For development
+
+The following command will build the site into `build/`
+
+```bash
 npm run dev
+```
+
+##### Watching for changes + BrowserSync
+
+To watch for changes in the files, and automatically rebuild the site, use:
+
+```bash
+npm run watch
+```
+
+To disable BrowserSync, add `browserSync: false` to the config object passed to the Laravel mix Pace plugin
+
+#### Building the site for production
+
+The following command will build the production ready static site into `build_prod/`
+
+```bash
+npm run prod
 ```
 
 ## Serving the application
@@ -36,14 +58,7 @@ The following command will serve the site to http://localhost:8000
 ./pace serve
 ```
 
-### Production
-
-Build the site for production using the following command.
-This will generate the static site into `build/`.
-
-```bash
-./pace build
-```
+Use the `--prod` option to serve the production site
 
 ## Application structure
 

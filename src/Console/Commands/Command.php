@@ -13,7 +13,7 @@ abstract class Command extends SymfonyCommand
     public InputInterface $input;
     public OutputInterface $output;
 
-    private Container $container;
+    protected Container $container;
     private SymfonyStyle $style;
 
     public function __construct(Container $container)
