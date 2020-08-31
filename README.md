@@ -62,6 +62,16 @@ The following command will serve the site to http://localhost:8000
 
 Use the `--prod` option to serve the production site
 
+## Template
+
+When you serve the initial template, it should look like this:
+
+<img
+    src="https://github.com/ellgreen/pace/blob/development/.assets/template-screenshot.png" width="800"
+    title="Pace template screenshot"
+    alt="Pace template screenshot"
+>
+
 ## Application structure
 
 A default Pace application will look like this:
