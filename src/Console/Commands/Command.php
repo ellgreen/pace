@@ -44,18 +44,13 @@ abstract class Command extends SymfonyCommand
         $this->style->text($message);
     }
 
-    public function success(string $message)
+    public function comment(string $message)
     {
-        $this->style->success($message);
+        $this->line("<comment>{$message}</comment>");
     }
 
-    public function warning(string $message)
+    public function info(string $message)
     {
-        $this->style->warning($message);
-    }
-
-    public function error(string $message)
-    {
-        $this->style->error($message);
+        $this->line("<info>{$message}</info>");
     }
 }

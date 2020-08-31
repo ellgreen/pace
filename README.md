@@ -39,7 +39,7 @@ The following command will serve the site to http://localhost:8000
 ### Production
 
 Build the site for production using the following command.
-This will generate the static site into `public_prod/`.
+This will generate the static site into `build/`.
 
 ```bash
 ./pace build
@@ -63,7 +63,7 @@ A default Pace application will look like this:
 |       +-- app.css
 |   +-- js/
 |       +-- app.js
-+-- public/
-+-- public_prod/    
++-- build/
++-- build_prod/    
 +-- pace
 ```

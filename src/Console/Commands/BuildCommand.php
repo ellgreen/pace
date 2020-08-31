@@ -2,7 +2,7 @@
 
 namespace EllGreen\Pace\Console\Commands;
 
-use EllGreen\Pace\Builder;
+use EllGreen\Pace\Pace;
 
 class BuildCommand extends Command
 {
@@ -14,12 +14,10 @@ class BuildCommand extends Command
         $this->setDescription('Builds the static site for production.');
     }
 
-    public function handle(Builder $builder)
+    public function handle(Pace $pace)
     {
-        $this->line('Started');
+        $pace->build();
 
-        $builder->build($dir = getcwd().'/public');
-
-        $this->success("Output files to: {$dir}");
+        $this->info("Pace build complete");
     }
 }
