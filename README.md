@@ -11,8 +11,10 @@ Using, [Laravel Blade](https://laravel.com/docs/7.x/blade),
 ### Create a new Pace project
 
 ```bash
-composer create-project ellgreen/pace-template
+composer create-project ellgreen/pace-template blog
 ```
+
+This will create a directory named `blog` with the scaffolding for your new Pace application
 
 ### Install the npm dependencies
 
