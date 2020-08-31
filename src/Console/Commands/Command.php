@@ -40,13 +40,7 @@ abstract class Command extends SymfonyCommand
 
     public function line(string $message)
     {
-
-        $this->style->text($message);
-    }
-
-    public function comment(string $message)
-    {
-        $this->line("<comment>{$message}</comment>");
+        $this->output->writeln($message);
     }
 
     public function info(string $message)

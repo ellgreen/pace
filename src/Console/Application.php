@@ -8,7 +8,7 @@ use Symfony\Component\Console\Application as SymfonyApplication;
 
 class Application extends SymfonyApplication
 {
-    public function commands(): array
+    protected function commands(): array
     {
         return [
             BuildCommand::class

@@ -4,7 +4,6 @@ namespace EllGreen\Pace\View;
 
 use EllGreen\Pace\Structure;
 use Illuminate\Container\Container;
-use Illuminate\Contracts\View\Factory as FactoryContract;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\View\Compilers\BladeCompiler;

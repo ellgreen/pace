@@ -18,11 +18,9 @@ class Compiler
 
     public function compile(string $view, string $path)
     {
-        if (! $this->filesystem->isDirectory($dir = dirname($path))) {
-            $this->filesystem->makeDirectory($dir, $mode = 0755, $recursive = true);
-        }
+        $this->filesystem->ensureDirectoryExists(dirname($path));
 
         $renderedView = $this->factory->make($view);
-        (new Filesystem)->put($path, $renderedView);
+        $this->filesystem->put($path, $renderedView);
     }
 }

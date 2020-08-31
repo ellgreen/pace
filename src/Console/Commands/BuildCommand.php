@@ -2,7 +2,8 @@
 
 namespace EllGreen\Pace\Console\Commands;
 
-use EllGreen\Pace\Pace;
+use Carbon\Carbon;
+use EllGreen\Pace\Builder;
 
 class BuildCommand extends Command
 {
@@ -14,10 +15,14 @@ class BuildCommand extends Command
         $this->setDescription('Builds the static site for production.');
     }
 
-    public function handle(Pace $pace)
+    public function handle(Builder $builder)
     {
-        $pace->build();
+        $start = Carbon::now();
 
-        $this->info("Pace build complete");
+        $builder->build();
+
+        $duration = $start->diffInMilliseconds();
+
+        $this->info("Pace build complete ({$duration}ms)");
     }
 }
