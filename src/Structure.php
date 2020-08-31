@@ -4,16 +4,27 @@ namespace EllGreen\Pace;
 
 class Structure
 {
-    public string $root;
+    private string $root;
 
     public function __construct(string $root)
     {
         $this->root = rtrim($root, '/');
     }
 
+    public function path(string $relativePath = null)
+    {
+        $path = $this->root;
+
+        if (isset($relativePath)) {
+            $path .= '/'.rtrim($relativePath);
+        }
+
+        return $path;
+    }
+
     public function resources()
     {
-        return $this->root.'/resources';
+        return $this->path('resources');
     }
 
     public function views()
@@ -26,19 +37,9 @@ class Structure
         return $this->views().'/pages';
     }
 
-    public function build()
-    {
-        return $this->root.'/build';
-    }
-
-    public function buildProd()
-    {
-        return $this->root.'/build_prod';
-    }
-
     public function bootstrap()
     {
-        return $this->root.'/bootstrap';
+        return $this->path('bootstrap');
     }
 
     public function cache()

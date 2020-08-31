@@ -18,10 +18,10 @@ class Builder
         $this->filesystem = $filesystem;
     }
 
-    public function build($pagesRelDir = ''): void
+    public function build($buildPath = 'build', $pagesRelDir = ''): void
     {
         $pagesRelDir = Str::of($pagesRelDir)->ltrim('/')->rtrim('/');
-        $outputDir = Str::of($this->structure->build())->finish('/');
+        $outputDir = Str::of($this->structure->path($buildPath))->finish('/');
         $pagesDir = $pagesRelDir->prepend($this->structure->pages().'/');
 
         foreach ($this->filesystem->files($pagesDir) as $file) {
@@ -33,19 +33,20 @@ class Builder
                 ->beforeLast('.blade.php');
 
             $view = $relativeName->replace('/', '.')->prepend('pages.');
-            $buildPath = $outputDir->finish('/')->append($relativeName);
+            $outputPath = $outputDir->finish('/')->append($relativeName);
 
 
             if (! $relativeName->basename()->exactly('index')) {
-                $buildPath = $buildPath->append('/index');
+                $outputPath = $outputPath->append('/index');
             }
 
-            $buildPath = $buildPath->append('.html');
-            $this->compiler->compile($view, $buildPath);
+            $outputPath = $outputPath->append('.html');
+            $this->compiler->compile($view, $outputPath);
         }
 
         foreach ($this->filesystem->directories($pagesDir) as $directory) {
             $this->build(
+                $buildPath,
                 Str::of($directory)->after($this->structure->pages())
             );
         }

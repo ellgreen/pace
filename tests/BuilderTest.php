@@ -33,26 +33,28 @@ class BuilderTest extends TestCase
 
     public function testBuild()
     {
+        $buildPath = $this->structure->path('build_test');
+
         $this->compiler
             ->shouldReceive('compile')
-            ->with('pages.index', $this->structure->build().'/index.html')
+            ->with('pages.index', $buildPath.'/index.html')
             ->once();
 
         $this->compiler
             ->shouldReceive('compile')
-            ->with('pages.about', $this->structure->build().'/about/index.html')
+            ->with('pages.about', $buildPath.'/about/index.html')
             ->once();
 
         $this->compiler
             ->shouldReceive('compile')
-            ->with('pages.contact.index', $this->structure->build().'/contact/index.html')
+            ->with('pages.contact.index', $buildPath.'/contact/index.html')
             ->once();
 
         $this->compiler
             ->shouldReceive('compile')
-            ->with('pages.contact.map', $this->structure->build().'/contact/map/index.html')
+            ->with('pages.contact.map', $buildPath.'/contact/map/index.html')
             ->once();
 
-        $this->builder->build();
+        $this->builder->build('build_test');
     }
 }

@@ -10,8 +10,6 @@ class StructureTest extends TestCase
     {
         $structure = new Structure('/root/');
 
-        $this->assertSame('/root/build', $structure->build());
-        $this->assertSame('/root/build_prod', $structure->buildProd());
         $this->assertSame('/root/bootstrap/cache/views', $structure->cachedViews());
     }
 
@@ -19,6 +17,6 @@ class StructureTest extends TestCase
     {
         $structure = new Structure('/root/');
 
-        $this->assertSame('/root', $structure->root);
+        $this->assertSame('/root', $structure->path());
     }
 }
