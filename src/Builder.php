@@ -2,6 +2,7 @@
 
 namespace EllGreen\Pace;
 
+use EllGreen\Pace\View\ViewData;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
@@ -10,16 +11,24 @@ class Builder
     private Compiler $compiler;
     private Structure $structure;
     private Filesystem $filesystem;
+    private ViewData $viewData;
 
-    public function __construct(Compiler $compiler, Structure $structure, Filesystem $filesystem)
-    {
+    public function __construct(
+        Compiler $compiler,
+        Structure $structure,
+        Filesystem $filesystem,
+        ViewData $viewData
+    ) {
         $this->compiler = $compiler;
         $this->structure = $structure;
         $this->filesystem = $filesystem;
+        $this->viewData = $viewData;
     }
 
     public function build($buildPath = 'build', $pagesRelDir = ''): void
     {
+        $this->viewData->share($buildPath);
+
         $pagesRelDir = Str::of($pagesRelDir)->ltrim('/')->rtrim('/');
         $outputDir = Str::of($this->structure->path($buildPath))->finish('/');
         $pagesDir = $pagesRelDir->prepend($this->structure->pages().'/');

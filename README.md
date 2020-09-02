@@ -66,9 +66,7 @@ Use the `--prod` option to serve the production site
 
 When you serve the initial template, it should look like this:
 
-<p align="center">
-    <img src="https://github.com/ellgreen/pace/blob/master/.assets/template-screenshot.png" width="800" title="Pace template screenshot" alt="Pace template screenshot">
-</p>
+<img src="https://github.com/ellgreen/pace/blob/master/.assets/template-screenshot.png" width="800" title="Pace template screenshot" alt="Pace template screenshot">
 
 ## Application structure
 

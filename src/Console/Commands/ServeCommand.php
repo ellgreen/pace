@@ -2,6 +2,7 @@
 
 namespace EllGreen\Pace\Console\Commands;
 
+use EllGreen\Pace\Builder;
 use EllGreen\Pace\Structure;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
@@ -36,15 +37,29 @@ class ServeCommand extends Command
             'Port to serve the site on',
             8000
         );
+
+        $this->addOption(
+            'build',
+            'b',
+            InputOption::VALUE_NONE,
+            'Build the site before serving'
+        );
     }
 
-    public function handle(Structure $structure)
+    public function handle(Structure $structure, Builder $builder)
     {
         $host = $this->input->getOption('host');
         $port = $this->input->getOption('port');
         $prod = $this->input->getOption('prod');
+        $build = $this->input->getOption('build');
 
-        $buildPath = $structure->path($prod ? 'build_prod' : 'build');
+        $buildPath = $structure->path($buildDir = ($prod ? 'build_prod' : 'build'));
+
+        if ($build) {
+            $this->info("Building: {$buildDir}\n");
+
+            $builder->build($buildDir);
+        }
 
         $this->info("Serving: {$buildPath}\n");
 

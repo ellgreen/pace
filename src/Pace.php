@@ -10,12 +10,10 @@ class Pace
 {
     public static function register(Container $container, string $rootPath)
     {
-        $container->singleton(Structure::class, function () use ($rootPath) {
-            return new Structure($rootPath);
-        });
+        $container->singleton(Structure::class, fn() => new Structure($rootPath));
 
         $factoryRegistrar = $container->make(FactoryRegistrar::class);
-        $container->bind(FactoryContract::class, fn() => $factoryRegistrar->register());
-        $container->bind('view', FactoryContract::class);
+        $container->singleton(FactoryContract::class, fn() => $factoryRegistrar->register());
+        $container->singleton('view', FactoryContract::class);
     }
 }

@@ -16,7 +16,7 @@ class Compiler
         $this->filesystem = $filesystem;
     }
 
-    public function compile(string $view, string $path)
+    public function compile(string $view, string $path): void
     {
         $this->filesystem->ensureDirectoryExists(dirname($path));
 
