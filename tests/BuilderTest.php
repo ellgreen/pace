@@ -5,6 +5,8 @@ namespace EllGreen\Pace\Tests;
 use EllGreen\Pace\Builder;
 use EllGreen\Pace\Compiler;
 use EllGreen\Pace\Structure;
+use EllGreen\Pace\View\Helpers\Sharer;
+use EllGreen\Pace\View\ViewData;
 use Illuminate\Filesystem\Filesystem;
 use Mockery\MockInterface;
 use org\bovigo\vfs\vfsStream;
@@ -25,7 +27,8 @@ class BuilderTest extends TestCase
         $this->builder = new Builder(
             $this->compiler = $this->mock(Compiler::class),
             $this->structure = new Structure($this->vfs->url()),
-            $this->filesystem = new Filesystem
+            $this->filesystem = new Filesystem,
+            $this->mock(Sharer::class)->shouldReceive('share')->once()->getMock()
         );
 
         vfsStream::copyFromFileSystem(__DIR__.'/data', $this->vfs);

@@ -33,6 +33,6 @@ class BuildCommand extends Command
 
         $duration = $start->diffInMilliseconds();
 
-        $this->info("Pace build complete [{$buildPath}] ({$duration}ms) ");
+        $this->info("Pace build complete [{$buildPath}] ({$duration}ms)");
     }
 }

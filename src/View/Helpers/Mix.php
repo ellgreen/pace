@@ -1,11 +1,10 @@
 <?php
 
-namespace EllGreen\Pace\View;
+namespace EllGreen\Pace\View\Helpers;
 
 use EllGreen\Pace\Structure;
 use Exception;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
 
 class Mix
 {
@@ -18,14 +17,11 @@ class Mix
         $this->structure = $structure;
     }
 
-    public function path(string $path, string $buildPath): string
+    public function __invoke(string $path): string
     {
-        $manifestPath = Str::of($this->structure->path($buildPath))
-            ->finish('/')
-            ->append(self::MANIFEST_NAME);
+        $manifestPath = $this->structure->build().'/'.self::MANIFEST_NAME;
 
-
-        $entry = $this->manifest($manifestPath)->filter(function ($value, $key) use ($path) {
+        $entry = $this->manifest($manifestPath)->filter(function ($_, $key) use ($path) {
            if ($key === $path) {
                return true;
            }
@@ -33,6 +29,7 @@ class Mix
            return $key === '/'.$path;
         })->first();
 
+        /** @noinspection PhpParamsInspection */
         throw_unless(
             isset($entry),
             Exception::class,
@@ -43,8 +40,9 @@ class Mix
     }
 
 
-    public function manifest(string $path): Collection
+    private function manifest(string $path): Collection
     {
+        /** @noinspection PhpParamsInspection */
         throw_unless(
             file_exists($path),
             Exception::class,

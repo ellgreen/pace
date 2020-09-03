@@ -2,9 +2,12 @@
 
 namespace EllGreen\Pace;
 
+use Exception;
+
 class Structure
 {
     private string $root;
+    private string $buildDir;
 
     public function __construct(string $root)
     {
@@ -50,5 +53,23 @@ class Structure
     public function cachedViews()
     {
         return $this->cache().'/views';
+    }
+
+    public function build($fullPath = true)
+    {
+        if (! isset($this->buildDir)) {
+            throw new Exception('Build directory has not been defined');
+        }
+
+        if (! $fullPath) {
+            return $this->buildDir;
+        }
+
+        return $this->path($this->buildDir);
+    }
+
+    public function setBuildDir(string $buildPath)
+    {
+        $this->buildDir = rtrim($buildPath, '/');
     }
 }

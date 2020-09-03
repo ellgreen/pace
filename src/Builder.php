@@ -2,7 +2,7 @@
 
 namespace EllGreen\Pace;
 
-use EllGreen\Pace\View\ViewData;
+use EllGreen\Pace\View\Helpers\Sharer;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
 
@@ -11,26 +11,33 @@ class Builder
     private Compiler $compiler;
     private Structure $structure;
     private Filesystem $filesystem;
-    private ViewData $viewData;
+    private Sharer $sharer;
 
     public function __construct(
         Compiler $compiler,
         Structure $structure,
         Filesystem $filesystem,
-        ViewData $viewData
+        Sharer $sharer
     ) {
         $this->compiler = $compiler;
         $this->structure = $structure;
         $this->filesystem = $filesystem;
-        $this->viewData = $viewData;
+        $this->sharer = $sharer;
     }
 
-    public function build($buildPath = 'build', $pagesRelDir = ''): void
+    public function build($buildDir = 'build'): void
     {
-        $this->viewData->share($buildPath);
+        $this->structure->setBuildDir($buildDir);
 
+        $this->sharer->share();
+
+        $this->buildPages();
+    }
+
+    public function buildPages($pagesRelDir = '')
+    {
         $pagesRelDir = Str::of($pagesRelDir)->ltrim('/')->rtrim('/');
-        $outputDir = Str::of($this->structure->path($buildPath))->finish('/');
+        $outputDir = Str::of($this->structure->build());
         $pagesDir = $pagesRelDir->prepend($this->structure->pages().'/');
 
         foreach ($this->filesystem->files($pagesDir) as $file) {
@@ -44,7 +51,6 @@ class Builder
             $view = $relativeName->replace('/', '.')->prepend('pages.');
             $outputPath = $outputDir->finish('/')->append($relativeName);
 
-
             if (! $relativeName->basename()->exactly('index')) {
                 $outputPath = $outputPath->append('/index');
             }
@@ -54,10 +60,7 @@ class Builder
         }
 
         foreach ($this->filesystem->directories($pagesDir) as $directory) {
-            $this->build(
-                $buildPath,
-                Str::of($directory)->after($this->structure->pages())
-            );
+            $this->buildPages(Str::of($directory)->after($this->structure->pages()));
         }
     }
 }
