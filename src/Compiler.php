@@ -2,25 +2,22 @@
 
 namespace EllGreen\Pace;
 
-use Illuminate\Contracts\View\Factory;
+use EllGreen\Pace\Sitemap\Page;
 use Illuminate\Filesystem\Filesystem;
 
 class Compiler
 {
-    private Factory $factory;
     private Filesystem $filesystem;
 
-    public function __construct(Factory $factory, Filesystem $filesystem)
+    public function __construct(Filesystem $filesystem)
     {
-        $this->factory = $factory;
         $this->filesystem = $filesystem;
     }
 
-    public function compile(string $view, string $path): void
+    public function compile(Page $page): void
     {
-        $this->filesystem->ensureDirectoryExists(dirname($path));
+        $this->filesystem->ensureDirectoryExists(dirname($page->outputPath()));
 
-        $renderedView = $this->factory->make($view);
-        $this->filesystem->put($path, $renderedView);
+        $this->filesystem->put($page->outputPath(), $page->render());
     }
 }

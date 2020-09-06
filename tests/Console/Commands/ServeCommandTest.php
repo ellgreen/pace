@@ -2,8 +2,9 @@
 
 namespace EllGreen\Pace\Tests\Console\Commands;
 
+use EllGreen\Pace\Builder;
 use EllGreen\Pace\Console\Commands\ServeCommand;
-use EllGreen\Pace\Pace;
+use EllGreen\Pace\Providers\PaceServiceProvider;
 use EllGreen\Pace\Tests\TestCase;
 use Illuminate\Container\Container;
 use Mockery\MockInterface;
@@ -18,7 +19,7 @@ class ServeCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        Pace::register($this->container = new Container, '/root');
+        PaceServiceProvider::register($this->container = new Container, '/root');
 
         $this->serveCommand = new ServeCommand($this->container);
     }
@@ -39,6 +40,23 @@ class ServeCommandTest extends TestCase
 
         $this->serveCommand->run(
             $input = new ArrayInput(['--prod' => true]),
+            $output = new NullOutput
+        );
+    }
+
+    public function testServeWithBuild()
+    {
+        $this->commandShouldBe(['php', '-S', 'localhost:8000', '-t', '/root/build']);
+
+        $this->container->instance(Builder::class, tap(
+            $this->mock(Builder::class),
+            function (MockInterface $builder) {
+                $builder->shouldReceive('build')->once();
+            }
+        ));
+
+        $this->serveCommand->run(
+            $input = new ArrayInput(['--build' => true]),
             $output = new NullOutput
         );
     }

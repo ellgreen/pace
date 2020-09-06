@@ -2,9 +2,10 @@
 
 namespace EllGreen\Pace;
 
+use EllGreen\Pace\Sitemap\Page;
+use EllGreen\Pace\Sitemap\Sitemap;
 use EllGreen\Pace\View\Helpers\Sharer;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 
 class Builder
 {
@@ -12,55 +13,47 @@ class Builder
     private Structure $structure;
     private Filesystem $filesystem;
     private Sharer $sharer;
+    private Sitemap $sitemap;
 
     public function __construct(
         Compiler $compiler,
         Structure $structure,
         Filesystem $filesystem,
-        Sharer $sharer
+        Sharer $sharer,
+        Sitemap $sitemap
     ) {
         $this->compiler = $compiler;
         $this->structure = $structure;
         $this->filesystem = $filesystem;
         $this->sharer = $sharer;
+        $this->sitemap = $sitemap;
     }
 
     public function build($buildDir = 'build'): void
     {
         $this->structure->setBuildDir($buildDir);
+        $this->cleanupBuildDir();
 
         $this->sharer->share();
 
-        $this->buildPages();
+        $this->sitemap->generate()->each(function (Page $page) {
+            $this->compiler->compile($page);
+        });
     }
 
-    public function buildPages($pagesRelDir = '')
+    public function cleanupBuildDir()
     {
-        $pagesRelDir = Str::of($pagesRelDir)->ltrim('/')->rtrim('/');
-        $outputDir = Str::of($this->structure->build());
-        $pagesDir = $pagesRelDir->prepend($this->structure->pages().'/');
-
-        foreach ($this->filesystem->files($pagesDir) as $file) {
-            // Relative name of view
-            // pages/index.blade.php         -> index
-            // pages/contact/index.blade.php -> contact/index
-            $relativeName = Str::of($file->getPathname())
-                ->after($this->structure->pages().'/')
-                ->beforeLast('.blade.php');
-
-            $view = $relativeName->replace('/', '.')->prepend('pages.');
-            $outputPath = $outputDir->finish('/')->append($relativeName);
-
-            if (! $relativeName->basename()->exactly('index')) {
-                $outputPath = $outputPath->append('/index');
+        foreach ($this->filesystem->allFiles($this->structure->build()) as $file) {
+            if ($file->getExtension() !== 'html') {
+                continue;
             }
 
-            $outputPath = $outputPath->append('.html');
-            $this->compiler->compile($view, $outputPath);
-        }
+            $this->filesystem->delete($file->getPathname());
 
-        foreach ($this->filesystem->directories($pagesDir) as $directory) {
-            $this->buildPages(Str::of($directory)->after($this->structure->pages()));
-        }
+            // Delete empty directories
+            if (count($this->filesystem->allFiles($file->getPath(), $hidden = true)) === 0) {
+                $this->filesystem->deleteDirectory($file->getPath());
+            }
+        };
     }
 }

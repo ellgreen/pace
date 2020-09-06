@@ -3,26 +3,27 @@
 namespace EllGreen\Pace\Tests;
 
 use EllGreen\Pace\Compiler;
-use Illuminate\Contracts\View\Factory;
+use EllGreen\Pace\Sitemap\Page;
 use Illuminate\Filesystem\Filesystem;
+use Mockery\MockInterface;
 
 class CompilerTest extends TestCase
 {
     public function testCompileWithNonExistentDirectory()
     {
-        $compiler = new Compiler(
-            $factory = $this->mock(Factory::class),
-            $filesystem = $this->mock(Filesystem::class)
-        );
+        $compiler = new Compiler($filesystem = $this->mock(Filesystem::class));
+
+        $page = tap($this->mock(Page::class), function (MockInterface $page) {
+            $page->shouldReceive('outputPath')
+                ->andReturn('path/to/output')
+                ->twice();
+
+            $page->shouldReceive('render')->andReturn('<p>Test</p>')->once();
+        });
 
         $filesystem->shouldReceive('ensureDirectoryExists')->with('path/to')->once();
-        $factory->shouldReceive('make')->with('view')->once()
-            ->andReturn($html = '<p>Test</p>');
-        $filesystem->shouldReceive('put')->with(
-            $output = 'path/to/output.xml',
-            $html
-        )->once();
+        $filesystem->shouldReceive('put')->with('path/to/output', '<p>Test</p>');
 
-        $compiler->compile('view', $output);
+        $compiler->compile($page);
     }
 }

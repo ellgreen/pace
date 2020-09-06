@@ -8,7 +8,7 @@ class StructureTest extends TestCase
 {
     public function testStructure()
     {
-        $structure = new Structure('/root/');
+        $structure = new Structure('/root');
 
         $this->assertSame('/root/bootstrap/cache/views', $structure->cachedViews());
     }
@@ -18,5 +18,20 @@ class StructureTest extends TestCase
         $structure = new Structure('/root/');
 
         $this->assertSame('/root', $structure->path());
+    }
+
+    public function testGetRelativeBuildDir()
+    {
+        $structure = new Structure('/root');
+
+        $this->assertSame('build', $structure->build(false));
+    }
+
+    public function testGetPages()
+    {
+        $structure = new Structure('/root');
+
+        $this->assertSame('/root/resources/views/pages', $structure->pages());
+
     }
 }

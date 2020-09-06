@@ -4,6 +4,7 @@ namespace EllGreen\Pace\View\Helpers;
 
 use EllGreen\Pace\Structure;
 use Exception;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 
 class Mix
@@ -11,44 +12,36 @@ class Mix
     private const MANIFEST_NAME = 'mix-manifest.json';
 
     private Structure $structure;
+    private Filesystem $filesystem;
 
-    public function __construct(Structure $structure)
+    public function __construct(Structure $structure, Filesystem $filesystem)
     {
         $this->structure = $structure;
+        $this->filesystem = $filesystem;
     }
 
     public function __invoke(string $path): string
     {
-        $manifestPath = $this->structure->build().'/'.self::MANIFEST_NAME;
+        $manifest = $this->manifest();
 
-        $entry = $this->manifest($manifestPath)->filter(function ($_, $key) use ($path) {
-           if ($key === $path) {
-               return true;
-           }
+        if (! $manifest->has($path)) {
+            throw new Exception("Entry does not exist in mix manifest for: {$path}");
+        }
 
-           return $key === '/'.$path;
-        })->first();
-
-        /** @noinspection PhpParamsInspection */
-        throw_unless(
-            isset($entry),
-            Exception::class,
-            "Entry does not exist in mix manifest for: {$path}"
-        );
-
-        return $entry;
+        return $manifest->get($path);
     }
 
-
-    private function manifest(string $path): Collection
+    private function manifest(): Collection
     {
+        $path = $this->structure->build().'/'.self::MANIFEST_NAME;
+
         /** @noinspection PhpParamsInspection */
         throw_unless(
-            file_exists($path),
+            $this->filesystem->exists($path),
             Exception::class,
             "Mix manifest does not exist: {$path}"
         );
 
-        return collect(json_decode(file_get_contents($path), $assoc = true));
+        return collect(json_decode($this->filesystem->get($path), $assoc = true));
     }
 }

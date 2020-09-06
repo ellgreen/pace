@@ -2,12 +2,10 @@
 
 namespace EllGreen\Pace;
 
-use Exception;
-
 class Structure
 {
     private string $root;
-    private string $buildDir;
+    private string $buildDir = 'build';
 
     public function __construct(string $root)
     {
@@ -19,7 +17,7 @@ class Structure
         $path = $this->root;
 
         if (isset($relativePath)) {
-            $path .= '/'.rtrim($relativePath);
+            $path .= '/'.rtrim($relativePath, '/');
         }
 
         return $path;
@@ -57,10 +55,6 @@ class Structure
 
     public function build($fullPath = true)
     {
-        if (! isset($this->buildDir)) {
-            throw new Exception('Build directory has not been defined');
-        }
-
         if (! $fullPath) {
             return $this->buildDir;
         }
