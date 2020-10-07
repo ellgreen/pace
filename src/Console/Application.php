@@ -13,7 +13,7 @@ class Application extends SymfonyApplication
     {
         return [
             BuildCommand::class,
-            ServeCommand::class
+            ServeCommand::class,
         ];
     }
 
