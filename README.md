@@ -40,8 +40,6 @@ To watch for changes in the files, and automatically rebuild the site, use:
 npm run watch
 ```
 
-To disable BrowserSync, add `browserSync: false` to the config object passed to the Laravel mix Pace plugin
-
 #### Building the site for production
 
 The following command will build the production ready static site into `build_prod/`
@@ -66,7 +64,7 @@ Use the `--prod` option to serve the production site
 
 When you serve the initial template, it should look like this:
 
-<img src="https://github.com/ellgreen/pace/blob/master/.assets/template-screenshot.png" width="800" title="Pace template screenshot" alt="Pace template screenshot">
+<img src="https://github.com/ellgreen/pace/blob/master/.assets/template-screenshot-v1.png" width="800" title="Pace template screenshot" alt="Pace template screenshot">
 
 You can view the template here:
 
