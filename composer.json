@@ -34,5 +34,8 @@
         "psr-4": {
             "EllGreen\\Pace\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "@php ./vendor/bin/phpunit"
     }
 }

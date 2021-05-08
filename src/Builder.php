@@ -43,6 +43,10 @@ class Builder
 
     public function cleanupBuildDir()
     {
+        if (! $this->filesystem->isDirectory($this->structure->build())) {
+            $this->filesystem->makeDirectory($this->structure->build());
+        }
+
         foreach ($this->filesystem->allFiles($this->structure->build()) as $file) {
             if ($file->getExtension() !== 'html') {
                 continue;
